@@ -3,24 +3,31 @@ using namespace std;
 
 class TicTacToe {
 private:
-    char board[3][3];   
-    char currentPlayer; 
+    char board[3][3];
+    char currentPlayer;
 
 public:
- 
+
     TicTacToe() {
-        
+
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 3; ++j) {
                 board[i][j] = ' ';
             }
         }
 
-       
         currentPlayer = 'X';
     }
 
-    
+    void resetBoard() {
+        for (int i = 0; i < 3; ++i) {
+            for (int j = 0; j < 3; ++j) {
+                board[i][j] = ' ';
+            }
+        }
+        currentPlayer = 'X';
+    }
+
     void displayBoard() {
         cout << "  1 2 3" << endl;
         for (int i = 0; i < 3; ++i) {
@@ -32,45 +39,40 @@ public:
         }
     }
 
- 
     bool makeMove(int row, int col) {
-       
         if (board[row][col] == ' ') {
             board[row][col] = currentPlayer;
-            return true;  
+            return true;
         }
-        return false; 
+        return false;
     }
 
-
     bool checkWin() {
-
         for (int i = 0; i < 3; ++i) {
             if (board[i][0] == currentPlayer && board[i][1] == currentPlayer && board[i][2] == currentPlayer)
-                return true; 
+                return true;
 
             if (board[0][i] == currentPlayer && board[1][i] == currentPlayer && board[2][i] == currentPlayer)
-                return true; 
+                return true;
         }
 
         if (board[0][0] == currentPlayer && board[1][1] == currentPlayer && board[2][2] == currentPlayer)
-            return true; 
+            return true;
 
         if (board[0][2] == currentPlayer && board[1][1] == currentPlayer && board[2][0] == currentPlayer)
-            return true; 
+            return true;
 
-        return false;  
+        return false;
     }
-
 
     bool isBoardFull() {
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 3; ++j) {
                 if (board[i][j] == ' ')
-                    return false; 
+                    return false;
             }
         }
-        return true;  
+        return true;
     }
 
     void switchPlayer() {
@@ -81,49 +83,55 @@ public:
         return currentPlayer;
     }
 };
+
 int main() {
-    TicTacToe game;  
-
-    int row, col;
-
+    char playAgain;
 
     do {
+        TicTacToe game;
 
-        game.displayBoard();
+        int row, col;
 
+        do {
+            game.displayBoard();
+            cout << "Player " << game.getCurrentPlayer() << ", choose row and column (use space between numbers, click enter after this): ";
+            cin >> row >> col;
 
-        cout << "Player " << game.getCurrentPlayer() << ", choose row and column (use space between numbers, click enter after this): ";
-        cin >> row >> col;
+            row--;
+            col--;
 
+            if (row >= 0 && row < 3 && col >= 0 && col < 3) {
+                if (game.makeMove(row, col)) {
 
-        row--;
-        col--;
+                    if (game.checkWin()) {
+                        cout << "Player " << game.getCurrentPlayer() << " win!" << endl;
+                        break;
+                    }
 
+                    if (game.isBoardFull()) {
+                        cout << "Draw!" << endl;
+                        break;
+                    }
 
-        if (row >= 0 && row < 3 && col >= 0 && col < 3) {
-            if (game.makeMove(row, col)) {
-                
-                if (game.checkWin()) {
-                    cout << "Player " << game.getCurrentPlayer() << " win!" << endl;
-                    break;
+                    game.switchPlayer();
                 }
-
-            
-                if (game.isBoardFull()) {
-                    cout << "Draw!" << endl;
-                    break;
+                else {
+                    cout << "This square is full, try again!" << endl;
                 }
-
-                
-                game.switchPlayer();
-            } else {
-                cout << "This square is full, try again!" << endl;
             }
-        } else {
-            cout << "You choose wrong numbers or smotehing goes wrong, try again!" << endl;
-        }
+            else {
+                cout << "You choose wrong numbers or something goes wrong, try again!" << endl;
+            }
 
-    } while (true);
+        } while (true);
+
+        cout << "Do you want to play again? (y/n): ";
+        cin >> playAgain;
+
+    } 
+    while (playAgain == 'y' || playAgain == 'Y');
+
+    cout << "Thanks for playing! Goodbye!" << endl;
 
     return 0;
 }
