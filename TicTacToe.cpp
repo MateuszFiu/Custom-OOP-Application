@@ -81,3 +81,49 @@ public:
         return currentPlayer;
     }
 };
+int main() {
+    TicTacToe game;  
+
+    int row, col;
+
+
+    do {
+
+        game.displayBoard();
+
+
+        cout << "Player " << game.getCurrentPlayer() << ", choose row and column (use space between numbers, click enter after this): ";
+        cin >> row >> col;
+
+
+        row--;
+        col--;
+
+
+        if (row >= 0 && row < 3 && col >= 0 && col < 3) {
+            if (game.makeMove(row, col)) {
+                
+                if (game.checkWin()) {
+                    cout << "Player " << game.getCurrentPlayer() << " win!" << endl;
+                    break;
+                }
+
+            
+                if (game.isBoardFull()) {
+                    cout << "Draw!" << endl;
+                    break;
+                }
+
+                
+                game.switchPlayer();
+            } else {
+                cout << "This square is full, try again!" << endl;
+            }
+        } else {
+            cout << "You choose wrong numbers or smotehing goes wrong, try again!" << endl;
+        }
+
+    } while (true);
+
+    return 0;
+}
